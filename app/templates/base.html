@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+    <head>
+        {% if title %}
+          <title>{{ title }}</title>
+        {% else %}
+          <title>Welcome to Ti4 new york</title>
+        {% endif %}
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}" />
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+        <noscript><link rel="stylesheet" href="{{ url_for('static', filename='css/noscript.css') }}"/></noscript>
+
+    </head>
+    <body >
+
+
+    {% with messages = get_flashed_messages() %} {% if messages %}
+    <section class="wrapper style1 align-center alert "  >
+      <div class="inner alert">
+        <div class="index align-left">
+          <section>
+      <header>
+        <h3>Alert</h3>
+      </header>
+      <div class="content">
+        <div class="box">
+          {% for message in messages %}
+            <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+      </div>
+      </section>
+</div>
+      </div>
+    </section>
+    
+    {% endif %} {% endwith %} {% block content %}{% endblock %}
+
+        
+    </body>
+</html>
+

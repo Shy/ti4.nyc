@@ -1,0 +1,78 @@
+{% extends "base.html" %} {% block content %}
+
+<!-- Items -->
+<section class="wrapper style1 align-center">
+  <div class="inner">
+    <h2>2021 Games</h2>
+    <p>
+      By signing up for a game you are agreeing to abide by both our
+      <a
+        href="https://docs.google.com/document/d/1GnDr3uOzguJwiBXrymW3cnus63CJ7PD2hlqHbEQZcPU/edit?usp=sharing"
+        >League Rules</a
+      >
+      and
+      <a
+        href="https://docs.google.com/document/d/1GnDr3uOzguJwiBXrymW3cnus63CJ7PD2hlqHbEQZcPU/edit?usp=sharing"
+        >Code of Conduct</a
+      >. All games start at 10:30am at their respective Locations.
+    </p>
+    <p>
+      We require you to be vaccinated to attend our events. Make sure to confirm
+      your vaccination status on your
+      <a href="{{ url_for('profile') }}">profile page.</a>
+    </p>
+
+    <div class="items style1 medium onscroll-fade-in">
+      {%for game in games%}
+      <section>
+        <h3>{{game.zodiac_sign}}</h3>
+        <h4>{{game.date | strftime}}</h4>
+
+        <dt>Registered Players:</dt>
+        <ol>
+          {%for signup in (game.id | playerlookup)%}
+          <li>{{signup.user.username}}</li>
+          {% endfor %}
+        </ol>
+        <form method="post" action="/games">
+          {{form.game_id(value=game.id)}}
+          {{form.user_id(value=current_user.id)}} {{ form.submit(class_="button
+          big wide smooth-scroll-middle") }}
+        </form>
+      </section>
+      {%endfor %}
+    </div>
+  </div>
+</section>
+
+{% if current_user.admin == True %}
+<hr />
+<section class="wrapper style1 align-center">
+  <div class="inner">
+    <h2>Create a Game</h2>
+
+    <form action="/gamesCreate" method="post">
+      {{ adminForm.hidden_tag() }}
+      <div class="fields">
+        <div class="field half">
+          <label for="name">{{ adminForm.name.label }}</label>
+          {{ adminForm.name(size = 32, class_="input") }} {% for error in
+          adminForm.name.errors %}
+          <p class="help is-danger">{{ error }}</p>
+          {% endfor %}
+        </div>
+        <div class="field half">
+          <label for="date">{{ adminForm.date.label }}</label>
+          {{ adminForm.date(size = 32, class_="input") }} {% for error in
+          adminForm.date.errors %}
+          <p class="help is-danger">{{ error }}</p>
+          {% endfor %}
+        </div>
+      </div>
+      <ul class="actions">
+        <li>{{ adminForm.submit(class_="button is-primary") }}</li>
+      </ul>
+    </form>
+  </div>
+</section>
+{% endif %} {% endblock %}

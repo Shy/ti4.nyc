@@ -1,0 +1,109 @@
+{% extends "base.html" %} {% block content %}
+<section
+  class="
+    banner
+    style2
+    orient-left
+    content-align-left
+    image-position-right
+    fullscreen
+    onload-image-fade-in onload-content-fade-right
+  "
+>
+  <div class="content">
+    <h1>Twilight Imperium NYC</h1>
+    <p class="major">
+      A group of Twilight Imperium players from NYC who get together to share a
+      love of the epic space opera while making friends not War Suns.
+    </p>
+    <ul class="actions">
+      {% if current_user.is_authenticated %}
+      <li>
+        <a href="{{ url_for('games') }}" class="button primary fit"
+          >Register for Games</a
+        >
+      </li>
+      <li>
+        <a href="{{ url_for('profile') }}" class="button fit">Manage Profile</a>
+      </li>
+      <li>
+        <a href="{{ url_for('logout') }}" class="button fit">Log Out</a>
+      </li>
+      {% else %}
+
+      <li>
+        <a
+          href="{{ url_for('register') }}"
+          class="button big wide smooth-scroll-middle"
+          >Sign up</a
+        >
+      </li>
+      <li>
+        <a
+          href="{{ url_for('login') }}"
+          class="button big wide smooth-scroll-middle"
+          >Login</a
+        >
+      </li>
+      {% endif %}
+    </ul>
+  </div>
+  <div class="image">
+    <img
+      src="{{ url_for('static', filename='images/bg.jpg') }}"
+      alt="Picture of Ti4 game."
+    />
+  </div>
+</section>
+<section
+  class="
+    spotlight
+    style4
+    orient-right
+    content-align-left
+    image-position-center
+    onscroll-image-fade-in
+  "
+  id="first"
+>
+  <div class="content">
+    <h2>About</h2>
+    <p>
+      Twilight Imperium 4 is a monstrous game of Galactic Conquest, where six
+      players vie for galactic domination through military might, political
+      maneuvering, and economic bargaining. It’s a fantastic game of strategy,
+      ugly victories and beautiful defeats.
+    </p>
+    <p>
+      Unfortunately playing TI4 is a bit of a commitment. A standard game
+      typically lasts an entire day. Given the length, it can be a bit difficult
+      to get the game out to the table. To help alleviate that issue, we’ve
+      created a group dedicated to providing a space for Twilight Imperium
+      players in New York City to meet and organize games, share resources, and
+      talk about our favorite epic space opera board game!
+    </p>
+    <p>
+      Every month TI4 NYC players will gather in offices and homes across the
+      city to play a game. The points of every game are tabulated, and in
+      December we’ll crown a city Champion.
+    </p>
+    <p>
+      Whether you've sat upon the throne of Mecatol Rex countless times or your
+      curious and want to check the game out, we'd be delighted to have you join
+      our
+      <a href="https://www.facebook.com/groups/TI.NYC/about/">facebook group</a>
+      and <a href="{{ url_for('register') }}">sign up</a> to play in a future
+      event!
+    </p>
+
+    <p></p>
+  </div>
+  <div class="image">
+    <img
+      src="{{ url_for('static', filename='images/spotlight01.jpg') }}"
+      alt=""
+    />
+  </div>
+</section>
+
+{% endblock %}

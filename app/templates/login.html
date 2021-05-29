@@ -1,0 +1,57 @@
+{% extends "base.html" %} {% block content %}
+<section class="
+banner
+    style2
+    orient-right
+    content-align-left
+    image-position-left
+    fullscreen
+    onload-image-fade-in onload-content-fade-right">
+  <div class="content">
+    <!-- Form -->
+
+    <header>
+      <h3>Login</h3>
+      <p>
+        New User? <a href="{{ url_for('register') }}">Click to Register!</a>
+      </p>
+    </header>
+    
+      <form action="" method="post" novalidate>
+        {{ form.hidden_tag() }}
+        <div class="fields">
+          <div class="field half">
+            <label for="username">{{ form.username.label }}</label>
+            {{ form.username(size = 32, class_="input") }} {% for error in
+            form.username.errors %}
+            <p class="help is-danger">{{ error }}</p>
+            {% endfor %}
+          </div>
+          <div class="field half">
+            <label for="password">{{ form.password.label }}</label>
+            {{ form.password(size = 32, class_="input") }} {% for error in
+            form.password.errors %}
+            <p class="help is-danger">{{ error }}</p>
+            {% endfor %}
+          </div>
+
+          <div class="field half">
+            {{ form.remember_me() }}
+            <label for="remember_me">{{ form.remember_me.label }}</label>
+          </div>
+        </div>
+        <ul class="actions">
+          <li>{{ form.submit(class_="button is-primary") }}</li>
+        </ul>
+      </form>
+    </div>
+  </div>
+  <div class="image">
+    <img
+      src="{{ url_for('static', filename='images/bg2.jpg') }}"
+      alt="Picture of Ti4 game."
+    />
+  </div>
+</section>
+
+{% endblock %}

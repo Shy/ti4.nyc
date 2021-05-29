@@ -1,0 +1,70 @@
+{% extends "base.html" %} {% block content %}
+
+<section
+  class="
+    banner
+    style2
+    orient-right
+    content-align-left
+    image-position-left
+    fullscreen
+    onload-image-fade-in onload-content-fade-right
+  "
+>
+  <div class="content">
+    <header>
+      <h3>Register</h3>
+      <p>
+        Already have an account?
+        <a href="{{ url_for('login') }}">Click to login!</a>
+      </p>
+    </header>
+
+    <form action="" method="post">
+      {{ form.hidden_tag() }}
+      <div class="fields">
+        <div class="field half">
+          <label for="username">{{ form.username.label }}</label>
+          {{ form.username(size = 32, class_="input") }} {% for error in
+          form.username.errors %}
+          <p class="help is-danger">{{ error }}</p>
+          {% endfor %}
+        </div>
+        <div class="field half">
+          <label for="email">{{ form.email.label }}</label>
+          {{ form.email(size = 64, class_="input") }} {% for error in
+          form.email.errors %}
+          <p class="help is-danger">{{ error }}</p>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="fields">
+        <div class="field half">
+          <label for="password">{{ form.password.label }}</label>
+          {{ form.password(size = 32, class_="input") }} {% for error in
+          form.password.errors %}
+          <p class="help is-danger">{{ error }}</p>
+          {% endfor %}
+        </div>
+        <div class="field half">
+          <label for="password2">{{ form.password2.label }}</label>
+          {{ form.password2(size = 32, class_="input") }} {% for error in
+          form.password2.errors %}
+          <p class="help is-danger">{{ error }}</p>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="control">{{ form.submit(class_="button is-primary") }}</div>
+      </div>
+    </form>
+  </div>
+  <div class="image">
+    <img
+      src="{{ url_for('static', filename='images/bg1.jpg') }}"
+      alt="Picture of Ti4 game."
+    />
+  </div>
+</section>
+{% endblock %}
