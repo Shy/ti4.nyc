@@ -64,3 +64,8 @@ htmlcov/
 .coverage
 .coverage.*
 *,cover
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
