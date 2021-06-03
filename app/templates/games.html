@@ -27,15 +27,30 @@
     <div class="items style1 medium onscroll-fade-in">
       {%for game in games%}
       <section>
+        {%if current_user.admin%}
+        <h3><a href="event/{{game.id}}">{{game.zodiac_sign}}</a></h3>
+        {% else %}
         <h3>{{game.zodiac_sign}}</h3>
+        {% endif %}
         <h4>{{game.date | strftime}}</h4>
-
         <dt>Registered Players:</dt>
         <ol>
-          {%for signup in (game.id | playerlookup)%}
-          <li>{{signup.user.username}}</li>
+          {%for signup in (game.id | registeredlookup)%}
+          <li>
+            {{signup.user.username}}</i>
+          </li>
           {% endfor %}
         </ol>
+        {% if (game.id | waitlistlookup)%}
+        <dt>Waitlist:</dt>
+        <ol>
+          {%for signup in (game.id | waitlistlookup)%}
+          <li>
+            {{signup.user.username}}</i>
+          </li>
+          {% endfor %}
+        </ol>
+        {% endif %}
         <form method="post" action="/games">
           {{form.game_id(value=game.id)}}
           {{form.user_id(value=current_user.id)}} {{ form.submit(class_="button

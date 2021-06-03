@@ -68,6 +68,14 @@ def profile():
     )
 
 
+@app.route("/event/<int:gameID>")
+def eventView(gameID):
+    if current_user.admin:
+        game = Game.query.filter_by(id=gameID).first()
+        return render_template("event.html", game=game)
+    return redirect(url_for("index"))
+
+
 @app.route("/gamesCreate", methods=["POST"])
 def gamesCreate():
     if current_user.admin:
@@ -140,5 +148,21 @@ def _jinja2_filter_datetime(date, fmt="MMMM Do"):
 
 @app.template_filter("playerlookup")
 def _playerlookup(gameID):
-    gameSignUps = SignUp.query.filter_by(event_id=gameID).all()
+    gameSignUps = SignUp.query.filter_by(event_id=gameID).order_by(SignUp.id).all()
     return gameSignUps
+
+
+@app.template_filter("registeredlookup")
+def _registeredlookup(gameID):
+    gameSignUps = _playerlookup(gameID)
+    if len(gameSignUps) <= 6:
+        return gameSignUps
+    return gameSignUps[: -(len(gameSignUps) % 6)]
+
+
+@app.template_filter("waitlistlookup")
+def _waitlistlookup(gameID):
+    gameSignUps = _playerlookup(gameID)
+    if len(gameSignUps) <= 6:
+        return []
+    return gameSignUps[-(len(gameSignUps) % 6) :]
