@@ -6,10 +6,20 @@
           <title>Welcome to Ti4 new york</title>
         {% endif %}
         <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+        <meta name="viewport" content="width=device-width, initial-scale=1," />
         <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}" />
         <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
         <noscript><link rel="stylesheet" href="{{ url_for('static', filename='css/noscript.css') }}"/></noscript>
+        <script type='application/ld+json'> 
+        {
+          "@context": "http://www.schema.org",
+          "@type": "WebSite",
+          "name": "Twilight Imperium NYC",
+          "alternateName": "ti4.nyc",
+          "url": "https://ti4.nyc",
+          "description": "A group of Twilight Imperium players from NYC who get together to share a love of the epic space opera while making friends not War Suns."
+        }
+        </script>
 
     </head>
     <body >

@@ -21,9 +21,9 @@ banner
         {{ form.hidden_tag() }}
         <div class="fields">
           <div class="field half">
-            <label for="username">{{ form.username.label }}</label>
-            {{ form.username(size = 32, class_="input") }} {% for error in
-            form.username.errors %}
+            <label for="email">{{ form.email.label }}</label>
+            {{ form.email(size = 32, class_="input") }} {% for error in
+            form.email.errors %}
             <p class="help is-danger">{{ error }}</p>
             {% endfor %}
           </div>
