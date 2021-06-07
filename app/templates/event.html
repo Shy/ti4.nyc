@@ -8,6 +8,12 @@
           <h3>{{game.zodiac_sign}}</h3>
           <p>{{game.date | strftime}}</p>
           <p>
+            <a
+              href="mailto:?bcc={%for signup in (game.id | playerLookup)%}{{signup.user.email}},{% endfor %}"
+              >Email Players.</a
+            >
+          </p>
+          <p>
             <a href="{{ url_for('games') }}">Back to Games.</a>
           </p>
           <p>

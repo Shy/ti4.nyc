@@ -6,28 +6,18 @@
     <h2>2021 Games</h2>
     <p>
       By signing up for a game you are agreeing to abide by both our
-      <a
-        href="https://docs.google.com/document/d/1GnDr3uOzguJwiBXrymW3cnus63CJ7PD2hlqHbEQZcPU/edit?usp=sharing"
-        >League Rules</a
-      >
+      <a href="https://docs.google.com/document/d/1GnDr3uOzguJwiBXrymW3cnus63CJ7PD2hlqHbEQZcPU/edit?usp=sharing">League Rules</a>
       and
-      <a
-        href="https://docs.google.com/document/d/1GnDr3uOzguJwiBXrymW3cnus63CJ7PD2hlqHbEQZcPU/edit?usp=sharing"
-        >Code of Conduct</a
-      >. All games start at 10:30am at their respective Locations.
+      <a href="https://docs.google.com/document/d/1GnDr3uOzguJwiBXrymW3cnus63CJ7PD2hlqHbEQZcPU/edit?usp=sharing">Code of Conduct</a>.
+      We require you to be vaccinated to attend our events. Make sure to confirm your vaccination status on your <a href="{{ url_for('profile') }}">profile page.</a>
     </p>
-    <p>
-      We require you to be vaccinated to attend our events. Make sure to confirm
-      your vaccination status on your
-      <a href="{{ url_for('profile') }}">profile page.</a> Games are first come,
-      first serve. For every set of 6 folks that register we'll be able to add a
-      new table. Table assignments are randomized.
+      <p>Games are assigned with priority going towards making sure we have enough hosts and copies of the game to host a table. Afterwards tables are assigned first come, first serve. For every set of six folks that register we'll be able to add a new table. Table assignments are randomized. We'll send a reminder that game sign-ups are closing two weeks prior so you have the chance to update your attendance and/or ability to host. Table assignments will get sent out a week prior. All games start at 10:30am at their respective locations.
     </p>
 
     <div class="items style1 medium onscroll-fade-in">
       {%for game in games%}
       <section>
-<img width="30%" height="auto" src="{{ game.zodiac_sign | zodiacStaticImage }}" alt="Icons from the Noun Project">
+      <img width="30%" height="auto" src="{{ game.zodiac_sign | zodiacStaticImage }}" alt="Icons from the Noun Project">
         <header>
         {%if current_user.admin%}
         <h3><a href="event/{{game.id}}">{{game.zodiac_sign}}</a></h3>
@@ -70,7 +60,6 @@
 <section class="wrapper style1 align-center">
   <div class="inner">
     <h2>Create a Game</h2>
-
     <form action="/gamesCreate" method="post">
       {{ adminForm.hidden_tag() }}
       <div class="fields">
