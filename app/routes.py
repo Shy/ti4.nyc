@@ -11,6 +11,13 @@ from app.forms import (
 )
 from app.models import User, Game, SignUp
 from config import Config
+from app.filters import (
+    _jinja2_filter_datetime,
+    _playerlookup,
+    _registeredlookup,
+    _waitlistlookup,
+    _zodiacstaticimage,
+)
 
 
 @app.route("/")

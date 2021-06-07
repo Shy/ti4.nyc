@@ -28,12 +28,14 @@
       {%for game in games%}
       <section>
         <span class="icon style1 minor"><img width="20%" src="{{ game.zodiac_sign | zodiacstaticimage }}" alt="zodiac by Lagot Design from the Noun Project"></span>
+        <header>
         {%if current_user.admin%}
         <h3><a href="event/{{game.id}}">{{game.zodiac_sign}}</a></h3>
         {% else %}
         <h3>{{game.zodiac_sign}}</h3>
         {% endif %}
-        <h4>{{game.date | strftime}}</h4>
+        <p>{{game.date | strftime}}</p>
+        </header>
         <dt>Registered Players:</dt>
         <ol>
           {%for signup in (game.id | registeredlookup)%}
