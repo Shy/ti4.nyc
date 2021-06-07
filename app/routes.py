@@ -12,10 +12,6 @@ from app.forms import (
 from app.models import User, Game, SignUp
 from config import Config
 
-import dateutil.parser
-import datetime
-import pendulum
-
 
 @app.route("/")
 @app.route("/index")
@@ -110,7 +106,7 @@ def games():
                         "Only vaccinated users can sign up for games. Head over to your profile to confirm your vaccination status."
                     )
             db.session.commit()
-        games = Game.query.all()
+        games = Game.query.order_by(Game.date).all()
         if current_user.admin:
             adminForm = GameCreationForm()
         else:
@@ -138,31 +134,3 @@ def register():
         flash("Congratulations, you are now a registered user!")
         return redirect(url_for("login"))
     return render_template("register.html", title="Register", form=form)
-
-
-@app.template_filter("strftime")
-def _jinja2_filter_datetime(date, fmt="MMMM Do"):
-    date = pendulum.parse(f"{date.year}-{date.month}-{date.day}", strict=False)
-    return date.format(fmt)
-
-
-@app.template_filter("playerlookup")
-def _playerlookup(gameID):
-    gameSignUps = SignUp.query.filter_by(event_id=gameID).order_by(SignUp.id).all()
-    return gameSignUps
-
-
-@app.template_filter("registeredlookup")
-def _registeredlookup(gameID):
-    gameSignUps = _playerlookup(gameID)
-    if len(gameSignUps) <= 6:
-        return gameSignUps
-    return gameSignUps[: -(len(gameSignUps) % 6)]
-
-
-@app.template_filter("waitlistlookup")
-def _waitlistlookup(gameID):
-    gameSignUps = _playerlookup(gameID)
-    if len(gameSignUps) <= 6:
-        return []
-    return gameSignUps[-(len(gameSignUps) % 6) :]

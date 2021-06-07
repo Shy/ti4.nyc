@@ -1,0 +1,41 @@
+{% extends "base.html" %} {% block content %}
+<section class="wrapper style1 align-center">
+  <div class="inner">
+    <div class="index align-left">
+      <!-- Form -->
+      <section>
+        <header>
+          <h3>{{game.zodiac_sign}}</h3>
+          <p>{{game.date | strftime}}</p>
+          <p>
+            <a href="{{ url_for('games') }}">Back to Games.</a>
+          </p>
+          <p>
+            <a href="{{ url_for('logout') }}">Click to logout.</a>
+          </p>
+        </header>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Signup Order</th>
+              <th>Player Name</th>
+              <th>Emails</th>
+            </tr>
+          </thead>
+          <tbody>
+            {%for signup in (game.id | playerlookup)%}
+            <tr>
+              <td>{{loop.index}}</td>
+              <td>{{signup.user.username}}</td>
+              <td>{{signup.user.email}}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </section>
+    </div>
+  </div>
+</section>
+
+{% endblock %}
