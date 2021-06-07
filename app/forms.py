@@ -113,7 +113,7 @@ class ProfileForm(FlaskForm):
     )
     host = BooleanField("Can you host games?")
     ownGame = BooleanField(
-        "Do you on the game, expansion and are willing to bring them?"
+        "Do you own the game, expansion and are willing to bring them?"
     )
     address = StringField(
         "What's your address? We'll use this if you decide to host, or if we need to mail you a prize. (Optional)",
