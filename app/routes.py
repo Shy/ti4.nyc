@@ -69,6 +69,10 @@ def profile():
     form = ProfileForm()
     if request.method == "GET":
         form.vaccinated.data = current_user.vaccinated
+        form.coc.data = current_user.coc
+        form.host.data = current_user.host
+        form.ownGame.data = current_user.ownGame
+        form.address.data = current_user.address
     if request.method == "POST" and form.validate():
         if form.validate_on_submit():
             if form.password.data:
@@ -77,6 +81,10 @@ def profile():
                 else:
                     flash("Please provide current password to update your password.")
             current_user.vaccinated = form.vaccinated.data
+            current_user.coc = form.coc.data
+            current_user.host = form.host.data
+            current_user.address = form.address.data
+            current_user.ownGame = form.ownGame.data
             db.session.commit()
 
     return render_template(
@@ -116,15 +124,24 @@ def games():
                 db.session.delete(signup)
             else:
                 user = User.query.filter_by(id=form.user_id.data).first()
-                if user.vaccinated:
+                if user.vaccinated & user.coc:
                     signup = SignUp(
                         user_id=form.user_id.data, event_id=form.game_id.data
                     )
                     db.session.add(signup)
                 else:
-                    flash(
-                        "Only vaccinated users can sign up for games. Head over to your profile to confirm your vaccination status."
-                    )
+                    if user.coc == False & user.vaccinated == False:
+                        flash(
+                            "Only players who have agreed to our rules, COC and are fully vaccinated can sign up for games. Head over to your profile to indicate your vaccination status and agreement to the rules."
+                        )
+                    elif user.coc == False:
+                        flash(
+                            "Only players who have agreed to our rules and COC can sign up for games. Head over to your profile to confirm your agreement."
+                        )
+                    elif user.vaccinated == False:
+                        flash(
+                            "Only vaccinated users can sign up for games. Head over to your profile to confirm your vaccination status."
+                        )
             db.session.commit()
         games = Game.query.order_by(Game.date).all()
         if current_user.admin:

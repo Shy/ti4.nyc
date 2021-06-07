@@ -35,4 +35,6 @@ def _waitlistLookup(gameID):
 
 @app.template_filter("zodiacStaticImage")
 def _zodiacStaticImage(zodiacSign):
-    return url_for("static", filename=f"icons/{zodiacSign.lower()}.svg")
+    return url_for(
+        "static", filename=f"icons/{zodiacSign.lower().replace(' ', '')}.svg"
+    )

@@ -5,12 +5,20 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 
 class User(UserMixin, db.Model):
-    __tablename__ = "user"
     id = db.Column(db.Integer, primary_key=True)
+    __tablename__ = "user"
     username = db.Column(db.String(64), index=True, unique=True)
     email = db.Column(db.String(120), index=True, unique=True)
     password_hash = db.Column(db.String(128))
     vaccinated = db.Column(db.Boolean())
+    ownGame = db.Column(db.Boolean())
+    host = db.Column(db.Boolean())
+    coc = db.Column(db.Boolean())
+    address = db.Column(db.String(256))
+    created = db.Column(db.DateTime, server_default=db.func.now())
+    updated = db.Column(
+        db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now()
+    )
     admin = db.Column(db.Boolean(), default=False)
 
     def __repr__(self):
@@ -31,6 +39,10 @@ def load_user(id):
 class Game(db.Model):
     __tablename__ = "game"
     id = db.Column(db.Integer, primary_key=True)
+    created = db.Column(db.DateTime, server_default=db.func.now())
+    updated = db.Column(
+        db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now()
+    )
     zodiac_sign = db.Column(db.String(140))
     date = db.Column(db.DateTime)
 
@@ -40,6 +52,7 @@ class Game(db.Model):
 
 class SignUp(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    created = db.Column(db.DateTime, server_default=db.func.now())
     user_id = db.Column(db.Integer, db.ForeignKey(User.id), nullable=False)
     event_id = db.Column(db.Integer, db.ForeignKey(Game.id), nullable=False)
     user = db.relationship("User", backref=db.backref("user"))

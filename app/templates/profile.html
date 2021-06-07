@@ -18,10 +18,33 @@
           {{ form.hidden_tag() }}
           <div class="fields">
             <div class="field half">
+              {{ form.coc() }}
+              <label for="coc">{{ form.coc.label }}</label>
+            </div>
+            <div class="field half">
               {{ form.vaccinated() }}
               <label for="vaccinated">{{ form.vaccinated.label }}</label>
             </div>
           </div>
+          <hr />
+          <div class="fields">
+            <div class="field half">
+              {{ form.host() }}
+              <label for="host">{{ form.host.label }}</label>
+            </div>
+            <div class="field half">
+              {{ form.ownGame() }}
+              <label for="ownGame">{{ form.ownGame.label }}</label>
+            </div>
+          </div>
+          <div class="field">
+            <label for="address">{{ form.address.label }}</label>
+            {{ form.address(size = 256, class_="input") }} {% for error in
+            form.address.errors %}
+            <p class="help is-danger">{{ error }}</p>
+            {% endfor %}
+          </div>
+          <hr />
           <div class="fields">
             <div class="field half">
               <label for="password">{{ form.oldpassword.label }}</label>

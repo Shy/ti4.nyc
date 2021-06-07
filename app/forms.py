@@ -45,6 +45,8 @@ class GameCreationForm(FlaskForm):
             "Capricorn",
             "Aquarius",
             "Pisces",
+            "Eight Player Special",
+            "14 Point Special",
         ],
         validators=[DataRequired()],
     )
@@ -97,7 +99,26 @@ class ProfileForm(FlaskForm):
         "Current Password",
         render_kw={"placeholder": "**************************"},
     )
-    vaccinated = BooleanField("Are you fully Vaccinated?")
+    vaccinated = BooleanField(
+        "Are you fully Vaccinated?",
+        validators=[
+            DataRequired(),
+        ],
+    )
+    coc = BooleanField(
+        "Do you agree to abide by our Code of Conduct & League Rules?",
+        validators=[
+            DataRequired(),
+        ],
+    )
+    host = BooleanField("Can you host games?")
+    ownGame = BooleanField(
+        "Do you on the game, expansion and are willing to bring them?"
+    )
+    address = StringField(
+        "What's your address? We'll use this if you decide to host, or if we need to mail you a prize. (Optional)",
+        render_kw={"placeholder": "1644 Sol System, Brooklyn 21351"},
+    )
     password = PasswordField(
         "New Password",
         render_kw={"placeholder": "**************************"},

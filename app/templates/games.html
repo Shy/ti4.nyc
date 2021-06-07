@@ -27,7 +27,7 @@
     <div class="items style1 medium onscroll-fade-in">
       {%for game in games%}
       <section>
-        <span class="icon style1 minor"><img width="20%" src="{{ game.zodiac_sign | zodiacStaticImage }}" alt="zodiac by Lagot Design from the Noun Project"></span>
+<img width="30%" height="auto" src="{{ game.zodiac_sign | zodiacStaticImage }}" alt="Icons from the Noun Project">
         <header>
         {%if current_user.admin%}
         <h3><a href="event/{{game.id}}">{{game.zodiac_sign}}</a></h3>
