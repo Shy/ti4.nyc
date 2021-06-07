@@ -27,7 +27,7 @@
     <div class="items style1 medium onscroll-fade-in">
       {%for game in games%}
       <section>
-        <span class="icon style1 minor"><img width="20%" src="{{ game.zodiac_sign | zodiacstaticimage }}" alt="zodiac by Lagot Design from the Noun Project"></span>
+        <span class="icon style1 minor"><img width="20%" src="{{ game.zodiac_sign | zodiacStaticImage }}" alt="zodiac by Lagot Design from the Noun Project"></span>
         <header>
         {%if current_user.admin%}
         <h3><a href="event/{{game.id}}">{{game.zodiac_sign}}</a></h3>
@@ -38,16 +38,16 @@
         </header>
         <dt>Registered Players:</dt>
         <ol>
-          {%for signup in (game.id | registeredlookup)%}
+          {%for signup in (game.id | registeredLookup)%}
           <li>
             {{signup.user.username}}</i>
           </li>
           {% endfor %}
         </ol>
-        {% if (game.id | waitlistlookup)%}
+        {% if (game.id | waitlistLookup)%}
         <dt>Waitlist:</dt>
         <ol>
-          {%for signup in (game.id | waitlistlookup)%}
+          {%for signup in (game.id | waitlistLookup)%}
           <li>
             {{signup.user.username}}</i>
           </li>
@@ -76,7 +76,7 @@
       <div class="fields">
         <div class="field half">
           <label for="name">{{ adminForm.name.label }}</label>
-          {{ adminForm.name(size = 32, class_="input") }} {% for error in
+          {{ adminForm.name() }} {% for error in
           adminForm.name.errors %}
           <p class="help is-danger">{{ error }}</p>
           {% endfor %}

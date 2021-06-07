@@ -24,7 +24,7 @@
             </tr>
           </thead>
           <tbody>
-            {%for signup in (game.id | playerlookup)%}
+            {%for signup in (game.id | playerLookup)%}
             <tr>
               <td>{{loop.index}}</td>
               <td>{{signup.user.username}}</td>
