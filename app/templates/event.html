@@ -27,6 +27,8 @@
               <th>Signup Order</th>
               <th>Player Name</th>
               <th>Emails</th>
+              <th>Can Host</th>
+              <th>Owns the Game</th>
             </tr>
           </thead>
           <tbody>
@@ -35,6 +37,16 @@
               <td>{{loop.index}}</td>
               <td>{{signup.user.username}}</td>
               <td>{{signup.user.email}}</td>
+              <td>
+                {%if signup.user.host%}
+                <i class="far fa-check-circle"></i>
+                {%endif %}
+              </td>
+              <td>
+                {%if signup.user.ownGame%}
+                <i class="far fa-check-circle"></i>
+                {%endif %}
+              </td>
             </tr>
             {% endfor %}
           </tbody>

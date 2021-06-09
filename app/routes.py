@@ -23,7 +23,7 @@ from app.filters import (
 @app.route("/")
 @app.route("/index")
 def index():
-    return render_template("index.html", title="Home")
+    return render_template("index.html", title="TI4.NYC")
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -38,7 +38,7 @@ def login():
             return redirect(url_for("login"))
         login_user(user, remember=form.remember_me.data)
         return redirect(url_for("profile"))
-    return render_template("login.html", title="Sign In", form=form)
+    return render_template("login.html", form=form, title="Login")
 
 
 @app.route("/logout")
@@ -59,7 +59,7 @@ def register():
         db.session.commit()
         flash("Congratulations, you are now a registered user!")
         return redirect(url_for("login"))
-    return render_template("register.html", title="Register", form=form)
+    return render_template("register.html", form=form, title="Register")
 
 
 @app.route("/profile", methods=["GET", "POST"])
@@ -96,7 +96,7 @@ def profile():
 def eventView(gameID):
     if current_user.admin:
         game = Game.query.filter_by(id=gameID).first()
-        return render_template("event.html", game=game)
+        return render_template("event.html", game=game, title=game.zodiac_sign)
     return redirect(url_for("index"))
 
 

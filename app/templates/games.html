@@ -46,8 +46,8 @@
         {% endif %}
         <form method="post" action="/games">
           {{form.game_id(value=game.id)}}
-          {{form.user_id(value=current_user.id)}} {{ form.submit(class_="button
-          big wide smooth-scroll-middle") }}
+          {{form.user_id(value=current_user.id)}} 
+          {{ form.submit(class_="button big fit smooth-scroll-middle") }}
         </form>
       </section>
       {%endfor %}
