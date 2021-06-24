@@ -1,0 +1,30 @@
+{% macro emailFormMacro(text,emailForm) -%}
+<form action="{{text}}" method="post">
+  {{ emailForm.hidden_tag() }}
+  <div class="fields">
+    <div class="field">
+      <label for="fromEmail">{{ emailForm.fromEmail.label }}</label>
+      {{emailForm.fromEmail}} {% for error in emailForm.fromEmail.errors %}
+      <p class="help is-danger">{{ error }}</p>
+      {% endfor %}
+    </div>
+    <div class="field">
+      <label for="subject">{{ emailForm.subject.label }}</label>
+      {{ emailForm.subject(size = 32, class_="input") }} {% for error in
+      emailForm.subject.errors %}
+      <p class="help is-danger">{{ error }}</p>
+      {% endfor %}
+    </div>
+    <div class="field">
+      <label for="content">{{ emailForm.content.label }}</label>
+      {{ emailForm.content(size = 32,) }} {% for error in
+      emailForm.content.errors %}
+      <p class="help is-danger">{{ error }}</p>
+      {% endfor %}
+    </div>
+  </div>
+  <ul class="actions">
+    <li>{{ emailForm.submit(class_="button is-primary") }}</li>
+  </ul>
+</form>
+{%- endmacro %}

@@ -20,7 +20,7 @@
       <img width="30%" height="auto" src="{{ game.zodiac_sign | zodiacStaticImage }}" alt="Icons from the Noun Project">
         <header>
         {%if current_user.admin%}
-        <h3><a href="event/{{game.id}}">{{game.zodiac_sign}}</a></h3>
+        <h3><a href="game/{{game.id}}">{{game.zodiac_sign}}</a></h3>
         {% else %}
         <h3>{{game.zodiac_sign}}</h3>
         {% endif %}

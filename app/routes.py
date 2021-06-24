@@ -1,6 +1,8 @@
+from re import sub
+from threading import Event
 from flask import render_template, flash, redirect, url_for, request
 from flask_login import login_user, logout_user, current_user, login_required
-from werkzeug.urls import url_parse
+from sendgrid.helpers.mail import to_email
 from app import app, db
 from app.forms import (
     LoginForm,
@@ -8,9 +10,10 @@ from app.forms import (
     ProfileForm,
     GameRegistrationForm,
     GameCreationForm,
+    EmailForm,
 )
 from app.models import User, Game, SignUp
-from config import Config
+from app.sendgrid import sendEmail
 from app.filters import (
     _jinja2_filter_datetime,
     _playerLookup,
@@ -92,11 +95,38 @@ def profile():
     )
 
 
-@app.route("/event/<int:gameID>")
-def eventView(gameID):
+@app.route("/game/<int:gameID>", methods=["GET", "POST"])
+def gameView(gameID):
     if current_user.admin:
+        emailForm = EmailForm()
+        if request.method == "POST":
+            if emailForm.validate_on_submit():
+                playerLookup = _playerLookup(gameID)
+                toEmails = []
+                for player in playerLookup:
+                    toEmails.append(player.user.email)
+                if (
+                    sendEmail(
+                        from_email=emailForm.fromEmail.data,
+                        reply_to=current_user.email,
+                        to_emails=toEmails,
+                        subject=emailForm.subject.data,
+                        content=emailForm.content.data,
+                    )
+                    in [200, 202]
+                ):
+                    flash("Emails Sent!")
+                else:
+                    flash(
+                        "Emails Failed to send. Try again or let Shy know something went wrong."
+                    )
+        emailForm.fromEmail.data = (
+            current_user.id - 1
+        )  # Sean and I are the first 2 users in the DB. If someone else becomes and Admin you'll need to rewrite this.
         game = Game.query.filter_by(id=gameID).first()
-        return render_template("event.html", game=game, title=game.zodiac_sign)
+        return render_template(
+            "game.html", game=game, title=game.zodiac_sign, emailForm=emailForm
+        )
     return redirect(url_for("index"))
 
 

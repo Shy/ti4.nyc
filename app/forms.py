@@ -7,10 +7,21 @@ from wtforms import (
     BooleanField,
     SubmitField,
     HiddenField,
+    TextAreaField,
     DateField,
 )
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
 from app.models import User
+
+
+class EmailForm(FlaskForm):
+    fromEmail = SelectField(
+        u"From:",
+        choices=[("Shy@ti4.nyc", "Shy@ti4.nyc"), ("Sean@ti4.nyc", "Sean@ti4.nyc")],
+    )
+    subject = StringField("Subject:", validators=[DataRequired()])
+    content = TextAreaField("Message:", validators=[DataRequired()])
+    submit = SubmitField("Send Email")
 
 
 class LoginForm(FlaskForm):
