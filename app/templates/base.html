@@ -1,51 +1,62 @@
 <!DOCTYPE html>
-    <head>
-        {% if title %}
-          <title>{{ title }}</title>
-        {% else %}
-          <title>Welcome to Ti4 new york</title>
-        {% endif %}
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1," />
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}" />
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
-        <noscript><link rel="stylesheet" href="{{ url_for('static', filename='css/noscript.css') }}"/></noscript>
-        <script type='application/ld+json'> 
-        {
-          "@context": "http://www.schema.org",
-          "@type": "WebSite",
-          "name": "Twilight Imperium NYC",
-          "alternateName": "ti4.nyc",
-          "url": "https://ti4.nyc",
-          "description": "A group of Twilight Imperium players from NYC who get together to share a love of the epic space opera while making friends not War Suns."
-        }
-        </script>
-
-    </head>
-    <body >
-
-
+<html lang="en">
+  <head>
+    {% if title %}
+    <title>{{ title }}</title>
+    {% else %}
+    <title>Welcome to Ti4 NYC</title>
+    {% endif %}
+    <meta charset="utf-8" />
+    <meta
+      name="description"
+      content="Website for the New York City Twilight Imperium 4th edition league. We play games monthly. Signup to join our community."
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1," />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/main.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+    <noscript
+      ><link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/noscript.css') }}"
+    /></noscript>
+    <script type="application/ld+json">
+      {
+        "@context": "http://www.schema.org",
+        "@type": "WebSite",
+        "name": "Twilight Imperium NYC",
+        "alternateName": "ti4.nyc",
+        "url": "https://ti4.nyc",
+        "description": "A group of Twilight Imperium players from NYC who get together to share a love of the epic space opera while making friends not War Suns."
+      }
+    </script>
+  </head>
+  <body>
     {% with messages = get_flashed_messages() %} {% if messages %}
-    <section class="wrapper style1 align-center alert "  >
+    <section class="wrapper style1 align-center alert">
       <div class="inner alert">
         <div class="index align-left">
           <section>
-      <header>
-        <h1><i class="fas fa-radiation-alt"></i> Alert</h1>
-      </header>
-      <div class="content" id="alert-box">
-        <div class="box">
-          {% for message in messages %}
-            <p>{{ message }}</p>
-            {% endfor %}
+            <header>
+              <h1><i class="fas fa-radiation-alt"></i> Alert</h1>
+            </header>
+            <div class="content" id="alert-box">
+              <div class="box">
+                {% for message in messages %}
+                <p>{{ message }}</p>
+                {% endfor %}
+              </div>
+            </div>
+          </section>
         </div>
       </div>
-      </section>
-</div>
-      </div>
     </section>
-    
-    {% endif %} {% endwith %} {% block content %}{% endblock %}
-    </body>
-</html>
 
+    {% endif %} {% endwith %} {% block content %}{% endblock %}
+  </body>
+</html>
