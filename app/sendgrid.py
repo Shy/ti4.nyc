@@ -21,5 +21,4 @@ def sendEmail(
     mail.add_personalization(to_list)
     mail.reply_to = reply_to
     response = sg.client.mail.send.post(request_body=mail.get())
-    print(type(response.status_code))
     return response.status_code
