@@ -73,19 +73,18 @@ def profile():
         form.host.data = current_user.host
         form.ownGame.data = current_user.ownGame
         form.address.data = current_user.address
-    if request.method == "POST" and form.validate():
-        if form.validate_on_submit():
-            if form.password.data:
-                if current_user.check_password(form.oldpassword.data):
-                    current_user.set_password(form.password.data)
-                else:
-                    flash("Please provide current password to update your password.")
-            current_user.vaccinated = form.vaccinated.data
-            current_user.coc = form.coc.data
-            current_user.host = form.host.data
-            current_user.address = form.address.data
-            current_user.ownGame = form.ownGame.data
-            db.session.commit()
+    if form.validate_on_submit():
+        if form.password.data:
+            if current_user.check_password(form.oldpassword.data):
+                current_user.set_password(form.password.data)
+            else:
+                flash("Please provide current password to update your password.")
+        current_user.vaccinated = form.vaccinated.data
+        current_user.coc = form.coc.data
+        current_user.host = form.host.data
+        current_user.address = form.address.data
+        current_user.ownGame = form.ownGame.data
+        db.session.commit()
 
     return render_template(
         "profile.html", title="Profile", form=form, user=current_user.username
@@ -113,6 +112,7 @@ def gameView(gameID):
                     in [200, 202]
                 ):
                     flash("Emails Sent!")
+                    emailForm.reset()
                 else:
                     flash(
                         "Emails Failed to send. Try again or let Shy know something went wrong."
