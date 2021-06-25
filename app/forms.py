@@ -10,7 +10,8 @@ from wtforms import (
     TextAreaField,
     DateField,
 )
-from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
+import wtforms
+from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, Length
 from app.models import User
 
 
@@ -28,7 +29,7 @@ class LoginForm(FlaskForm):
     email = StringField(
         "Email",
         render_kw={"placeholder": "info@ti4.nyc"},
-        validators=[DataRequired(), Email()],
+        validators=[DataRequired(), Email(), Length(min=1, max=120)],
     )
 
     password = PasswordField(
@@ -74,17 +75,17 @@ class GameRegistrationForm(FlaskForm):
 class RegistrationForm(FlaskForm):
     username = StringField(
         "First Name, and Last initial",
-        validators=[DataRequired()],
+        validators=[DataRequired(), Length(min=3, max=64)],
         render_kw={"placeholder": "Shy R."},
     )
     email = StringField(
         "Email",
-        validators=[DataRequired(), Email()],
+        validators=[DataRequired(), Email(), Length(min=1, max=120)],
         render_kw={"placeholder": "info@ti4.nyc"},
     )
     password = PasswordField(
         "Password",
-        validators=[DataRequired()],
+        validators=[DataRequired(), Length(min=16, max=128)],
         render_kw={"placeholder": "**************************"},
     )
     password2 = PasswordField(
@@ -95,11 +96,6 @@ class RegistrationForm(FlaskForm):
     recaptcha = RecaptchaField()
     submit = SubmitField("Register")
 
-    def validate_username(self, username):
-        user = User.query.filter_by(username=username.data.lower()).first()
-        if user is not None:
-            raise ValidationError("That username is already taken.")
-
     def validate_email(self, email):
         user = User.query.filter_by(email=email.data.lower()).first()
         if user is not None:
@@ -107,6 +103,10 @@ class RegistrationForm(FlaskForm):
 
 
 class ProfileForm(FlaskForm):
+    username = StringField(
+        "First Name, and Last initial",
+        validators=[Length(min=3, max=64)],
+    )
     oldpassword = PasswordField(
         "Current Password",
         render_kw={"placeholder": "**************************"},
@@ -141,11 +141,6 @@ class ProfileForm(FlaskForm):
         render_kw={"placeholder": "**************************"},
     )
     submit = SubmitField("Update")
-
-    def validate_username(self, username):
-        user = User.query.filter_by(username=username.data.lower()).first()
-        if user is not None:
-            raise ValidationError("Please use a different username.")
 
     def validate_email(self, email):
         user = User.query.filter_by(email=email.data.lower()).first()

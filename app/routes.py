@@ -68,6 +68,7 @@ def profile():
         return redirect(url_for("index"))
     form = ProfileForm()
     if request.method == "GET":
+        form.username.data = current_user.username
         form.vaccinated.data = current_user.vaccinated
         form.coc.data = current_user.coc
         form.host.data = current_user.host
@@ -79,6 +80,7 @@ def profile():
                 current_user.set_password(form.password.data)
             else:
                 flash("Please provide current password to update your password.")
+        current_user.username = form.username.data
         current_user.vaccinated = form.vaccinated.data
         current_user.coc = form.coc.data
         current_user.host = form.host.data
