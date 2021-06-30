@@ -1,3 +1,4 @@
+{% from "block/emailForm.html" import emailFormMacro %} 
 {% extends "base.html" %} {% block content %}
 
 <!-- Items -->
@@ -84,4 +85,14 @@
     </form>
   </div>
 </section>
+
+<hr />
+<section class="wrapper style1 align-center">
+  <div class="inner">
+    <h3>Email All Players</h3>
+    {{ emailFormMacro("/emailAll",emailForm) }}
+  </div>
+</section>
+
+
 {% endif %} {% endblock %}

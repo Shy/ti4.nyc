@@ -102,7 +102,7 @@ def gameView(gameID):
                 playerLookup = _playerLookup(gameID)
                 toEmails = []
                 for player in playerLookup:
-                    toEmails.append(player.user.email)
+                    toEmails.append([player.email, player.username])
                 if (
                     sendEmail(
                         from_email=emailForm.fromEmail.data,
@@ -136,6 +136,37 @@ def gamesCreate():
         game = Game(zodiac_sign=form.name.data, date=form.date.data)
         db.session.add(game)
         db.session.commit()
+    return redirect(url_for("games"))
+
+
+@app.route("/emailAll", methods=["POST"])
+def emailAll():
+    if current_user.admin:
+        emailForm = EmailForm()
+        if emailForm.validate_on_submit():
+            players = User.query.all()
+
+            to_email = []
+            for player in players:
+                to_email.append([player.email, player.username])
+            if (
+                sendEmail(
+                    from_email=emailForm.fromEmail.data,
+                    reply_to=current_user.email,
+                    to_emails=to_email,
+                    subject=emailForm.subject.data,
+                    content=emailForm.content.data,
+                )
+                in [200, 202]
+            ):
+                flash("Emails Sent!")
+            else:
+                flash(
+                    "Emails Failed to send. Try again or let Shy know something went wrong."
+                )
+        emailForm.fromEmail.data = (
+            current_user.id - 1
+        )  # Sean and I are the first 2 users in the DB. If someone else becomes and Admin you'll need to rewrite this.
     return redirect(url_for("games"))
 
 
@@ -175,13 +206,17 @@ def games():
         games = Game.query.order_by(Game.date).all()
         if current_user.admin:
             adminForm = GameCreationForm()
+            emailForm = EmailForm()
+            emailForm.fromEmail.data = current_user.id - 1
         else:
             adminForm = ""
+            emailForm = ""
         return render_template(
             "games.html",
             title="Upcoming Games",
             games=games,
             form=form,
             adminForm=adminForm,
+            emailForm=emailForm,
         )
     return redirect(url_for("login"))
