@@ -102,7 +102,7 @@ def gameView(gameID):
                 playerLookup = _playerLookup(gameID)
                 toEmails = []
                 for player in playerLookup:
-                    toEmails.append([player.email, player.username])
+                    toEmails.append([player.user.email, player.user.username])
                 if (
                     sendEmail(
                         from_email=emailForm.fromEmail.data,
