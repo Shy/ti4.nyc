@@ -20,7 +20,7 @@ def _playerLookup(gameID):
 @app.template_filter("registeredLookup")
 def _registeredLookup(gameID):
     gameSignUps = _playerLookup(gameID)
-    if len(gameSignUps) <= 6:
+    if len(gameSignUps) <= 6 or (len(gameSignUps) % 6) == 0:
         return gameSignUps
     return gameSignUps[: -(len(gameSignUps) % 6)]
 
@@ -28,7 +28,7 @@ def _registeredLookup(gameID):
 @app.template_filter("waitlistLookup")
 def _waitlistLookup(gameID):
     gameSignUps = _playerLookup(gameID)
-    if len(gameSignUps) <= 6:
+    if len(gameSignUps) <= 6 or (len(gameSignUps) % 6) == 0:
         return []
     return gameSignUps[-(len(gameSignUps) % 6) :]
 
