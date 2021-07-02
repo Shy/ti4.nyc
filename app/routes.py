@@ -26,6 +26,14 @@ def index():
     return render_template("index.html", title="TI4.NYC")
 
 
+# @app.route("/password")
+# def passwordreset():
+#     reset = User.query.filter_by(email="").first()
+#     reset.set_password("")
+#     db.session.commit()
+#     return "Done"
+
+
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if current_user.is_authenticated:

@@ -25,9 +25,9 @@
               <th>Owns the Game</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody class="dragContainer">
             {%for signup in (game.id | playerLookup)%}
-            <tr>
+            <tr class="box" draggable="true">
               <td>{{loop.index}}</td>
               <td>{{signup.user.username}}</td>
               <td>{{signup.user.email}}</td>
@@ -42,7 +42,9 @@
                 {%endif %}
               </td>
             </tr>
-            {% endfor %}
+            {% if (loop.index % 6) == 0 %}
+            <!-- yo -->
+            {% endif%} {% endfor %}
           </tbody>
         </table>
       </section>
@@ -57,5 +59,6 @@
     </div>
   </div>
 </section>
+<script src="{{ url_for('static', filename='js/table.js') }}"></script>
 <!-- https://github.com/Shopify/draggable/blob/master/examples/src/content/Sortable/MultipleContainers/MultipleContainers.html -->
 {% endblock %}
