@@ -176,7 +176,12 @@ def emailAll():
 def games():
     if current_user.is_anonymous:
         return redirect(url_for("index"))
-    elif current_user.is_authenticated:
+    elif not (current_user.coc & current_user.vaccinated):
+        flash(
+            "Only players who have agreed to our rules, COC and are fully vaccinated can sign up for games."
+        )
+        return redirect(url_for("profile"))
+    else:
         form = GameRegistrationForm()
         if request.method == "POST":
             signup = SignUp.query.filter_by(
@@ -192,18 +197,10 @@ def games():
                     )
                     db.session.add(signup)
                 else:
-                    if user.coc == False & user.vaccinated == False:
-                        flash(
-                            "Only players who have agreed to our rules, COC and are fully vaccinated can sign up for games. Head over to your profile to indicate your vaccination status and agreement to the rules."
-                        )
-                    elif user.coc == False:
-                        flash(
-                            "Only players who have agreed to our rules and COC can sign up for games. Head over to your profile to confirm your agreement."
-                        )
-                    elif user.vaccinated == False:
-                        flash(
-                            "Only vaccinated users can sign up for games. Head over to your profile to confirm your vaccination status."
-                        )
+                    flash(
+                        "Only players who have agreed to our rules, COC and are fully vaccinated can sign up for games. Head over to your profile to indicate your vaccination status and agreement to the rules."
+                    )
+                    return redirect(url_for("profile"))
             db.session.commit()
         games = Game.query.order_by(Game.date).all()
         if current_user.admin:
