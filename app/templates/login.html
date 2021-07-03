@@ -39,6 +39,10 @@ banner
             {{ form.remember_me() }}
             <label for="remember_me">{{ form.remember_me.label }}</label>
           </div>
+          <div class="field half">
+            <a href="{{ url_for('reset_password_request') }}">Forgot Your Password?</a>
+            
+          </div>
         </div>
         <ul class="actions">
           <li>{{ form.submit(class_="button is-primary") }}</li>

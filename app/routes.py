@@ -8,9 +8,11 @@ from app.forms import (
     GameRegistrationForm,
     GameCreationForm,
     EmailForm,
+    ResetPasswordForm,
+    ResetPasswordRequestForm,
 )
 from app.models import User, Game, SignUp
-from app.sendgrid import sendEmail
+from app.sendgrid import sendEmail, sendPasswordResetEmail
 from app.filters import (
     _jinja2_filter_datetime,
     _playerLookup,
@@ -220,3 +222,35 @@ def games():
             emailForm=emailForm,
         )
     return redirect(url_for("login"))
+
+
+@app.route("/reset_password_request", methods=["GET", "POST"])
+def reset_password_request():
+    if current_user.is_authenticated:
+        return redirect(url_for("index"))
+    form = ResetPasswordRequestForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first()
+        if user:
+            sendPasswordResetEmail(user)
+        flash("Check your email (and Spam) for the instructions to reset your password")
+        return redirect(url_for("login"))
+    return render_template(
+        "reset_password_request.html", title="Reset Password", form=form
+    )
+
+
+@app.route("/reset_password/<token>", methods=["GET", "POST"])
+def reset_password(token):
+    if current_user.is_authenticated:
+        return redirect(url_for("index"))
+    user = User.verify_reset_password_token(token)
+    if not user:
+        return redirect(url_for("index"))
+    form = ResetPasswordForm()
+    if form.validate_on_submit():
+        user.set_password(form.password.data)
+        db.session.commit()
+        flash("Your password has been reset.")
+        return redirect(url_for("login"))
+    return render_template("reset_password.html", form=form)

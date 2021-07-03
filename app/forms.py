@@ -15,6 +15,30 @@ from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, Le
 from app.models import User
 
 
+class ResetPasswordRequestForm(FlaskForm):
+    email = StringField(
+        "Email",
+        validators=[DataRequired(), Email()],
+        render_kw={"placeholder": "info@ti4.nyc"},
+    )
+    recaptcha = RecaptchaField()
+    submit = SubmitField("Request Password Reset")
+
+
+class ResetPasswordForm(FlaskForm):
+    password = PasswordField(
+        "Password",
+        validators=[DataRequired()],
+        render_kw={"placeholder": "**************************"},
+    )
+    password2 = PasswordField(
+        "Repeat Password",
+        validators=[DataRequired(), EqualTo("password")],
+        render_kw={"placeholder": "**************************"},
+    )
+    submit = SubmitField("Reset Password")
+
+
 class EmailForm(FlaskForm):
     fromEmail = SelectField(
         u"From:",
