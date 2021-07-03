@@ -119,7 +119,6 @@ def gameView(gameID):
                     in [200, 202]
                 ):
                     flash("Emails Sent!", "success")
-                    emailForm.reset()
                 else:
                     flash(
                         "Emails Failed to send. Try again or let Shy know something went wrong.",
@@ -197,7 +196,7 @@ def games():
                 db.session.delete(signup)
             else:
                 user = User.query.filter_by(id=form.user_id.data).first()
-                if user.vaccinated & user.coc:
+                if user.vaccinated == True & user.coc == True:
                     signup = SignUp(
                         user_id=form.user_id.data, event_id=form.game_id.data
                     )
