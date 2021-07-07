@@ -40,26 +40,13 @@
     </script>
   </head>
   <body>
-    {% with messages = get_flashed_messages() %} {% if messages %}
-    <section class="wrapper style1 align-center alert">
-      <div class="inner alert">
-        <div class="index align-left">
-          <section>
-            <header>
-              <h1><i class="fas fa-radiation-alt"></i> Alert</h1>
-            </header>
-            <div class="content" id="alert-box">
-              <div class="box">
-                {% for message in messages %}
-                <p>{{ message }}</p>
-                {% endfor %}
-              </div>
-            </div>
-          </section>
-        </div>
-      </div>
-    </section>
-
-    {% endif %} {% endwith %} {% block content %}{% endblock %}
+    {% block content %}{% endblock %} {% with messages =
+    get_flashed_messages(with_categories=true) %}{% if messages %}
+    <script src="{{ url_for('static', filename='js/flash.js') }}"></script>
+    {% for category, message in messages %}
+    <script>
+      window.FlashMessage.create("{{message}}", "{{category}}");
+    </script>
+    {% endfor %} {% endif %} {% endwith %}
   </body>
 </html>
