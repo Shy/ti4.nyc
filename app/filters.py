@@ -5,6 +5,12 @@ from app.models import User, Game, SignUp
 from flask import url_for
 
 
+@app.template_filter("chunker")
+def _chunker(seq, size):
+    print(seq)
+    return (seq[pos : pos + size] for pos in range(0, len(seq), size))
+
+
 @app.template_filter("strftime")
 def _jinja2_filter_datetime(date, fmt="dddd MMMM Do"):
     date = pendulum.parse(f"{date.year}-{date.month}-{date.day}", strict=False)
