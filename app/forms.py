@@ -83,6 +83,7 @@ class GameCreationForm(FlaskForm):
             "Pisces",
             "Eight Player Special",
             "14 Point Special",
+            "Codex",
         ],
         validators=[DataRequired()],
     )
