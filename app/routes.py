@@ -8,9 +8,11 @@ from app.forms import (
     GameRegistrationForm,
     GameCreationForm,
     EmailForm,
+    ResetPasswordForm,
+    ResetPasswordRequestForm,
 )
 from app.models import User, Game, SignUp
-from app.sendgrid import sendEmail
+from app.sendgrid import sendEmail, sendPasswordResetEmail
 from app.filters import (
     _jinja2_filter_datetime,
     _playerLookup,
@@ -42,7 +44,7 @@ def login():
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data.lower()).first()
         if user is None or not user.check_password(form.password.data):
-            flash("Invalid Email or password")
+            flash("Invalid Email or password", "error ")
             return redirect(url_for("login"))
         login_user(user, remember=form.remember_me.data)
         return redirect(url_for("profile"))
@@ -65,7 +67,7 @@ def register():
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
-        flash("Congratulations, you are now a registered user!")
+        flash("Congratulations, you are now a registered user!", "success ")
         return redirect(url_for("login"))
     return render_template("register.html", form=form, title="Register")
 
@@ -87,7 +89,10 @@ def profile():
             if current_user.check_password(form.oldpassword.data):
                 current_user.set_password(form.password.data)
             else:
-                flash("Please provide current password to update your password.")
+                flash(
+                    "Please provide current password to update your password.",
+                    "warning",
+                )
         current_user.username = form.username.data
         current_user.vaccinated = form.vaccinated.data
         current_user.coc = form.coc.data
@@ -121,11 +126,11 @@ def gameView(gameID):
                     )
                     in [200, 202]
                 ):
-                    flash("Emails Sent!")
-                    emailForm.reset()
+                    flash("Emails Sent!", "success")
                 else:
                     flash(
-                        "Emails Failed to send. Try again or let Shy know something went wrong."
+                        "Emails Failed to send. Try again or let Shy know something went wrong.",
+                        "error",
                     )
         emailForm.fromEmail.data = (
             current_user.id - 1
@@ -167,10 +172,11 @@ def emailAll():
                 )
                 in [200, 202]
             ):
-                flash("Emails Sent!")
+                flash("Emails Sent!", "success")
             else:
                 flash(
-                    "Emails Failed to send. Try again or let Shy know something went wrong."
+                    "Emails Failed to send. Try again or let Shy know something went wrong.",
+                    "error",
                 )
         emailForm.fromEmail.data = (
             current_user.id - 1
@@ -182,7 +188,13 @@ def emailAll():
 def games():
     if current_user.is_anonymous:
         return redirect(url_for("index"))
-    elif current_user.is_authenticated:
+    elif not (current_user.coc & current_user.vaccinated):
+        flash(
+            "Only players who have agreed to our rules, COC and are fully vaccinated can sign up for games.",
+            "warning",
+        )
+        return redirect(url_for("profile"))
+    else:
         form = GameRegistrationForm()
         if request.method == "POST":
             signup = SignUp.query.filter_by(
@@ -192,24 +204,17 @@ def games():
                 db.session.delete(signup)
             else:
                 user = User.query.filter_by(id=form.user_id.data).first()
-                if user.vaccinated & user.coc:
+                if user.vaccinated == True & user.coc == True:
                     signup = SignUp(
                         user_id=form.user_id.data, event_id=form.game_id.data
                     )
                     db.session.add(signup)
                 else:
-                    if user.coc == False & user.vaccinated == False:
-                        flash(
-                            "Only players who have agreed to our rules, COC and are fully vaccinated can sign up for games. Head over to your profile to indicate your vaccination status and agreement to the rules."
-                        )
-                    elif user.coc == False:
-                        flash(
-                            "Only players who have agreed to our rules and COC can sign up for games. Head over to your profile to confirm your agreement."
-                        )
-                    elif user.vaccinated == False:
-                        flash(
-                            "Only vaccinated users can sign up for games. Head over to your profile to confirm your vaccination status."
-                        )
+                    flash(
+                        "Only players who have agreed to our rules, COC and are fully vaccinated can sign up for games. Head over to your profile to indicate your vaccination status and agreement to the rules.",
+                        "warning",
+                    )
+                    return redirect(url_for("profile"))
             db.session.commit()
         games = Game.query.order_by(Game.date).all()
         if current_user.admin:
@@ -228,3 +233,38 @@ def games():
             emailForm=emailForm,
         )
     return redirect(url_for("login"))
+
+
+@app.route("/reset_password_request", methods=["GET", "POST"])
+def reset_password_request():
+    if current_user.is_authenticated:
+        return redirect(url_for("index"))
+    form = ResetPasswordRequestForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first()
+        if user:
+            sendPasswordResetEmail(user)
+        flash(
+            "Check your email (and Spam) for the instructions to reset your password",
+            "info",
+        )
+        return redirect(url_for("login"))
+    return render_template(
+        "reset_password_request.html", title="Reset Password", form=form
+    )
+
+
+@app.route("/reset_password/<token>", methods=["GET", "POST"])
+def reset_password(token):
+    if current_user.is_authenticated:
+        return redirect(url_for("index"))
+    user = User.verify_reset_password_token(token)
+    if not user:
+        return redirect(url_for("index"))
+    form = ResetPasswordForm()
+    if form.validate_on_submit():
+        user.set_password(form.password.data)
+        db.session.commit()
+        flash("Your password has been reset.", "success")
+        return redirect(url_for("login"))
+    return render_template("reset_password.html", form=form)

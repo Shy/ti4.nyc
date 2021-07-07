@@ -1,6 +1,6 @@
 from config import Config
 from sendgrid import SendGridAPIClient
-
+from flask import render_template
 from sendgrid.helpers.mail import (
     Mail,
     From,
@@ -42,9 +42,30 @@ def sendEmail(
     try:
         sendgrid_client = SendGridAPIClient(api_key=Config.SENDGRID_API_KEY)
         response = sendgrid_client.send(message)
-        print(response.status_code)
-        print(response.body)
-        print(response.headers)
+    except Exception as e:
+        print(e.body)
+    return response.status_code
+
+
+def sendPasswordResetEmail(user):
+    token = user.get_reset_password_token()
+    message = Mail()
+    message.to = [
+        To(user.email, user.username, p=0),
+    ]
+    message.subject = Subject("[TI4.NYC] Reset your password]", p=0)
+    message.from_email = From("noreply@ti4.nyc", "noreply")
+    message.content = Content(
+        MimeType.text,
+        render_template("email/reset_password.txt", user=user, token=token),
+    )
+    message.content = Content(
+        MimeType.html,
+        render_template("email/reset_password.html", user=user, token=token),
+    )
+    try:
+        sendgrid_client = SendGridAPIClient(api_key=Config.SENDGRID_API_KEY)
+        response = sendgrid_client.send(message)
     except Exception as e:
         print(e.body)
     return response.status_code
