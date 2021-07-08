@@ -11,16 +11,16 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(64), index=True)
     email = db.Column(db.String(120), index=True, unique=True)
     password_hash = db.Column(db.String(128))
-    vaccinated = db.Column(db.Boolean())
-    ownGame = db.Column(db.Boolean())
-    host = db.Column(db.Boolean())
-    coc = db.Column(db.Boolean())
+    vaccinated = db.Column(db.Boolean, default=False, nullable=False)
+    ownGame = db.Column(db.Boolean, default=False, nullable=False)
+    host = db.Column(db.Boolean, default=False, nullable=False)
+    coc = db.Column(db.Boolean, default=False, nullable=False)
     address = db.Column(db.String(256))
     created = db.Column(db.DateTime, server_default=db.func.now())
     updated = db.Column(
         db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now()
     )
-    admin = db.Column(db.Boolean(), default=False)
+    admin = db.Column(db.Boolean(), default=False, nullable=False)
 
     def __repr__(self):
         return "<User {}>".format(self.username)

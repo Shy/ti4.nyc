@@ -64,7 +64,15 @@ def register():
         return redirect(url_for("index"))
     form = RegistrationForm()
     if form.validate_on_submit():
-        user = User(username=form.username.data, email=form.email.data.lower())
+        user = User(
+            username=form.username.data,
+            email=form.email.data.lower(),
+            coc=False,
+            ownGame=False,
+            host=False,
+            vaccinated=False,
+            admin=False,
+        )
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
