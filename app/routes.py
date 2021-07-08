@@ -19,6 +19,7 @@ from app.filters import (
     _registeredLookup,
     _waitlistLookup,
     _zodiacStaticImage,
+    _chunker,
 )
 
 
@@ -26,6 +27,14 @@ from app.filters import (
 @app.route("/index")
 def index():
     return render_template("index.html", title="TI4.NYC")
+
+
+# @app.route("/password")
+# def passwordreset():
+#     reset = User.query.filter_by(email="").first()
+#     reset.set_password("")
+#     db.session.commit()
+#     return "Done"
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -55,7 +64,15 @@ def register():
         return redirect(url_for("index"))
     form = RegistrationForm()
     if form.validate_on_submit():
-        user = User(username=form.username.data, email=form.email.data.lower())
+        user = User(
+            username=form.username.data,
+            email=form.email.data.lower(),
+            coc=False,
+            ownGame=False,
+            host=False,
+            vaccinated=False,
+            admin=False,
+        )
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()

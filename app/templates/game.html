@@ -14,37 +14,48 @@
             <a href="{{ url_for('logout') }}">Click to logout.</a>
           </p>
         </header>
+        <div class="content">
+          {%for signups in (game.id | playerLookup | chunker(6))%}
 
-        <table>
-          <thead>
-            <tr>
-              <th>Signup Order</th>
-              <th>Player Name</th>
-              <th>Emails</th>
-              <th>Can Host</th>
-              <th>Owns the Game</th>
-            </tr>
-          </thead>
-          <tbody>
-            {%for signup in (game.id | playerLookup)%}
-            <tr>
-              <td>{{loop.index}}</td>
-              <td>{{signup.user.username}}</td>
-              <td>{{signup.user.email}}</td>
-              <td>
-                {%if signup.user.host%}
-                <i class="far fa-check-circle"></i>
-                {%endif %}
-              </td>
-              <td>
-                {%if signup.user.ownGame%}
-                <i class="far fa-check-circle"></i>
-                {%endif %}
-              </td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
+          <h4>
+            {% if (signups|length) == 6%} Table {{loop.index}}
+            {%else%}Waitlist{%endif%}
+          </h4>
+          {% set outer_loop = loop %}
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Signup Order</th>
+                  <th>Player Name</th>
+                  <th>Emails</th>
+                  <th>Can Host</th>
+                  <th>Owns the Game</th>
+                </tr>
+              </thead>
+              <tbody class="dragContainer">
+                {% for signup in signups %}
+                <tr class="box" draggable="true">
+                  <td>{{loop.index + (outer_loop.index0*6)}}</td>
+                  <td>{{signup.user.username}}</td>
+                  <td>{{signup.user.email}}</td>
+                  <td>
+                    {%if signup.user.host%}
+                    <i class="far fa-check-circle"></i>
+                    {%endif %}
+                  </td>
+                  <td>
+                    {%if signup.user.ownGame%}
+                    <i class="far fa-check-circle"></i>
+                    {%endif %}
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          {% endfor %}
+        </div>
       </section>
       {% if current_user.admin == True %}
       <section>
@@ -57,5 +68,6 @@
     </div>
   </div>
 </section>
-<!-- https://github.com/Shopify/draggable/blob/master/examples/src/content/Sortable/MultipleContainers/MultipleContainers.html -->
+
+<script src="{{ url_for('static', filename='js/table.js') }}"></script>
 {% endblock %}
