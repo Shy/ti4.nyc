@@ -1,3 +1,7 @@
-# Welcome to Microblog!
+# Ti4.NYC
 
-This is an example application featured in my [Flask Mega-Tutorial](https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-i-hello-world). See the tutorial for instructions on how to work with it.
+## What is this about?
+
+This is a python app I built to help schedule games for a Twilight Imperium League I help organize in NYC. It's hosted on AWS and currently live at [ti4.nyc](https://ti4.nyc/).
+
+It uses alambic to handle database migrations, Recaptcha APIs to mitigate spammers and sendgrid for sending emails out to participants.
